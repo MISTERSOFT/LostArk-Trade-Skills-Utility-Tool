@@ -1,0 +1,17 @@
+# Todo
+- [ ] Fishing
+    - [ ] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
+    - [ ] Organize code better
+    - [ ] Optimize code
+        - [ ] Optimize screenshot function performance
+        - [ ] Use multi-threading
+        - [ ] Try to refine/optimize detection functions
+        - [ ] Detect Work Energy every 10min instead of every loop iteration
+    - [ ] Check if we have better results with _EasyOCR_ than _Tesseract OCR_
+    - [ ] Detect if we lost server connection
+    - [ ] Implement timeout when no catch detected for a long time (like 1min)
+    - [ ] Implement detection of Trade Skills hotbars
+    - [ ] Implement fishing strategy
+    - [ ] Implement repair strategy
+    - [ ] Implement internationalization for in-game text recognition with [python-i18n](https://pypi.org/project/python-i18n/)
+    - [ ] Manage more screen size ?
