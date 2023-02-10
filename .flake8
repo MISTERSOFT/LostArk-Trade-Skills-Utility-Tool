@@ -1,6 +1,8 @@
 [flake8]
 max-line-length = 120
 extend-ignore =
+    # Whitespace before ':' - Black will format automatically
+    E203,
     # Too many blank lines
     E303,
     # Ignore f-strings, we like them:

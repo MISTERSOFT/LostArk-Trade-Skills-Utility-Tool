@@ -1,4 +1,9 @@
 {
     "python.linting.flake8Enabled": true,
-    "files.trimTrailingWhitespace": true
+    "python.formatting.provider": "none",
+    "[python]": {
+        "files.trimTrailingWhitespace": true,
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    }
 }
