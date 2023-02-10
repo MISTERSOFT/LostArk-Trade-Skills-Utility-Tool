@@ -1,6 +1,7 @@
 # Todo
 - [ ] Fishing
     - [ ] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
+    - [ ] Create a configuration file (default and user) with [Dynaconf](https://www.dynaconf.com/) / [Quick tuto](https://towardsdatascience.com/from-novice-to-expert-how-to-write-a-configuration-file-in-python-273e171a8eb3#4cab)
     - [ ] Organize code better
     - [ ] Optimize code
         - [ ] Optimize screenshot function performance
@@ -15,3 +16,4 @@
     - [ ] Implement repair strategy
     - [ ] Implement internationalization for in-game text recognition with [python-i18n](https://pypi.org/project/python-i18n/)
     - [ ] Manage more screen size ?
+    - [ ] Create unit tests
