@@ -5,6 +5,6 @@ extend-ignore =
     E303,
     # Ignore f-strings, we like them:
     SFS301
-max-complexity = 2
+max-complexity = 10
 doctests = True
 format = ${cyan}%(path)s${reset}:${yellow_bold}%(row)d${reset}:${green_bold}%(col)d${reset}: ${red_bold}%(code)s${reset} %(text)s
