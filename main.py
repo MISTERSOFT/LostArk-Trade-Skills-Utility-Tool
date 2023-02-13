@@ -157,10 +157,11 @@ def extract_text_from_screenshot(
         recognized_text = clean_string(recognized_text)
         recognized_texts.append(recognized_text)
 
-    for recognized_text in recognized_texts:
-        if search in recognized_text:
-            debug(f'"{search}" text found')
-            results[search] = (x, y)
+        for recognized_text in recognized_texts:
+            if search in recognized_text:
+                debug(f'"{search}" text found')
+                results[search] = (x, y)
+                return results
 
     return results
 
