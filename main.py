@@ -8,6 +8,9 @@ from PIL import ImageGrab
 import pytesseract
 import pywinauto
 
+from fishing_rod import FishingRodList, ItemRarity
+import utils.cv2utils as cv2utils
+
 # Set tesseract executable path
 # pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
 
@@ -31,6 +34,11 @@ fishBaitCastedAt = None
 
 WORK_ENERGY_REQUIRED_FOR_FISHING = 60
 current_work_energy = 8532
+
+fishingRodList = FishingRodList()
+FISHING_ROD_FOR_FISHING = fishingRodList.get(ItemRarity.RARE)
+FISHING_ROD_FOR_MINI_GAME = fishingRodList.get(ItemRarity.EPIC)
+current_equiped_fishing_rod = FISHING_ROD_FOR_FISHING
 
 FISHING_TIMEOUT = 10  # seconds
 FISHING_RETRY_MAX = 3  # number of retry if something goes wrong
@@ -274,14 +282,44 @@ def repair_fishing_rod():
 
 
 def switch_fishing_rod():
-    # TODO: test + modif plus tard
+    global current_equiped_fishing_rod
 
     debug("Switch rod")
     # open inventory
     keyboard.press_and_release("i")
     time.sleep(0.5)
-    # TODO: change x,y location based on user config
-    mouse.move(1357, 293)
+    screenshot = take_screenshot()
+    gray_screenshot = cv2.cvtColor(screenshot, cv2.COLOR_RGB2GRAY)
+    # x, y is the center of the fishing rod icon in the inventory
+    x = 0
+    y = 0
+    # switch to fishing rod dedicated to minigame
+    if current_equiped_fishing_rod.rarity is FISHING_ROD_FOR_FISHING.rarity:
+        matchLocations, resizedWidth, resizedHeight = cv2utils.match_template_scale(
+            gray_screenshot, FISHING_ROD_FOR_MINI_GAME.img_gray
+        )
+        for point in zip(*matchLocations[::-1]):
+            if point is not None:
+                x = point[0] + (resizedWidth / 2)
+                y = point[1] + (resizedHeight / 2)
+                debug(f"Switch to mini game rod at ({x}, {y})")
+                break
+        current_equiped_fishing_rod = FISHING_ROD_FOR_MINI_GAME
+
+    # switch to fishing rod dedicated to fish
+    if current_equiped_fishing_rod.rarity is FISHING_ROD_FOR_MINI_GAME.rarity:
+        matchLocations, resizedWidth, resizedHeight = cv2utils.match_template_scale(
+            gray_screenshot, FISHING_ROD_FOR_FISHING.img_gray
+        )
+        for point in zip(*matchLocations[::-1]):
+            if point is not None:
+                x = point[0] + (resizedWidth / 2)
+                y = point[1] + (resizedHeight / 2)
+                debug(f"Switch to fish rod at ({x}, {y})")
+                break
+        current_equiped_fishing_rod = FISHING_ROD_FOR_FISHING
+
+    mouse.move(x, y)
     time.sleep(0.5)
     mouse.right_click()
     time.sleep(0.5)
@@ -473,13 +511,13 @@ def play_mini_game():
     screenshot_img = take_screenshot(500, 100, 550, 560)
     hsv_img = cv2.cvtColor(screenshot_img, cv2.COLOR_RGB2HSV)
     # orange zone
-    perfect_zone_hsv_lower = np.array([106, 238, 176])
-    perfect_zone_hsv_upper = np.array([135, 255, 255])
+    # perfect_zone_hsv_lower = np.array([106, 238, 176])
+    # perfect_zone_hsv_upper = np.array([135, 255, 255])
     # yellow zone
-    # great_zone_hsv_lower = [21, 163, 189]
-    # great_zone_hsv_upper = [179, 255, 255]
+    great_zone_hsv_lower = [21, 163, 189]
+    great_zone_hsv_upper = [179, 255, 255]
     y_low_zone, y_mid_zone, y_high_zone = get_mini_game_zone_position(
-        hsv_img, hsv_lower=perfect_zone_hsv_lower, hsv_upper=perfect_zone_hsv_upper
+        hsv_img, great_zone_hsv_lower, great_zone_hsv_upper
     )
     debug(f"Zone low/mid/high: {y_low_zone}/{y_mid_zone}/{y_high_zone}")
     mini_game_ends_at = datetime.datetime.now() + datetime.timedelta(seconds=5)
@@ -489,8 +527,7 @@ def play_mini_game():
         hsv_img = cv2.cvtColor(screenshot_img, cv2.COLOR_RGB2HSV)
         y_lure = get_lure_mini_game_y_position(hsv_img)
         debug(f"y lure: {y_lure}")
-        # if (y_lure >= y_high_zone):
-        if y_lure >= y_high_zone:
+        if y_lure >= y_mid_zone:
             debug("# Middle zone")
             debug("Press Space")
             keyboard.press_and_release("space")
