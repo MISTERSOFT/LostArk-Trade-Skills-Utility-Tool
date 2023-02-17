@@ -3,7 +3,7 @@
     - [ ] Improve repair_fishing_rod() function
     - [ ] Rework is_fishing_rod_need_repair() function
     - [ ] Rework has_work_energy() function
-    - [ ] Rework switch_fishing_rod() function
+    - [x] Rework switch_fishing_rod() function
     - [ ] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
     - [ ] Create a configuration file (default and user) with [Dynaconf](https://www.dynaconf.com/) / [Quick tuto](https://towardsdatascience.com/from-novice-to-expert-how-to-write-a-configuration-file-in-python-273e171a8eb3#4cab)
     - [ ] Organize code better
