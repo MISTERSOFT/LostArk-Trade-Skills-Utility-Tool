@@ -4,16 +4,19 @@
     - [ ] Rework is_fishing_rod_need_repair() function
     - [ ] Rework has_work_energy() function
     - [x] Rework switch_fishing_rod() function
-    - [ ] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
+    - [x] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
+    - [ ] Bind UI logic to run the bot
+        - [ ] Move/Chunk all code from `main.py` to `core` module
+        - [ ] Make `main.py` the startup file
     - [ ] Create a configuration file (default and user) with [Dynaconf](https://www.dynaconf.com/) / [Quick tuto](https://towardsdatascience.com/from-novice-to-expert-how-to-write-a-configuration-file-in-python-273e171a8eb3#4cab)
-    - [ ] Organize code better
+    - [x] Organize code better
     - [ ] Optimize code
         - [ ] Optimize screenshot function performance
         - [ ] Use multi-threading
         - [ ] Try to refine/optimize detection functions
         - [ ] Detect Work Energy every 10min instead of every loop iteration
     - [ ] Check if we have better results with _EasyOCR_ than _Tesseract OCR_
-    - [ ] Detect if we lost server connection
+    - [ ] Detect if we lost server connection or if the game window has been closed
     - [ ] Implement timeout when no catch detected for a long time (like 1min)
     - [ ] Implement detection of Trade Skills hotbars
     - [ ] Implement fishing strategy
@@ -22,4 +25,3 @@
     - [ ] Be able to choose colored zone to focus in mini games
     - [ ] Manage more screen size ?
     - [ ] Create unit tests
-    - [ ] Check if we got disconnected from the game
