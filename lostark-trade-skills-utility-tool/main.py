@@ -8,11 +8,17 @@ from PIL import ImageGrab
 import pytesseract
 import pywinauto
 
-from fishing_rod import FishingRodList, ItemRarity
-import utils.cv2utils as cv2utils
+from data.fishing.fishing_rod import FishingRodFactory, ItemRarity
+import core.cv2utils as cv2utils
 
 # Set tesseract executable path
 # pytesseract.pytesseract.tesseract_cmd = r'<full_path_to_your_tesseract_executable>'
+
+# Code for when this file will become de startup file
+# if __name__ == '__main__':
+#     import sys
+#     import app
+#     sys.exit(app.run())
 
 app_run = True
 
@@ -20,11 +26,13 @@ is_fishing = False
 
 can_cast_fishing = True
 hook_mark_img = cv2.imread(
-    "images/hook_mark.png", cv2.IMREAD_GRAYSCALE
+    "assets/images/hook_mark.png", cv2.IMREAD_GRAYSCALE
 )  # read and transform image to gray
-repair_tools_icon_img = cv2.imread("images/repair_tools_icon.jpg")
-vital_energy_icon_img = cv2.imread("images/vital_energy_icon.jpg")
-fishing_mini_game_ready_icon_img = cv2.imread("images/fishing_mini_game_ready_icon.jpg")
+repair_tools_icon_img = cv2.imread("assets/images/repair_tools_icon.jpg")
+vital_energy_icon_img = cv2.imread("assets/images/vital_energy_icon.jpg")
+fishing_mini_game_ready_icon_img = cv2.imread(
+    "assets/images/fishing_mini_game_ready_icon.jpg"
+)
 
 CAST_FISHING_NET_KEY = "d"
 CAST_FISH_LURE_KEY = "e"
@@ -33,9 +41,9 @@ CAST_FISH_BAIT_COOLDOWN = 15  # 15min
 fishBaitCastedAt = None
 
 WORK_ENERGY_REQUIRED_FOR_FISHING = 60
-current_work_energy = 8532
+current_work_energy = 8900
 
-fishingRodList = FishingRodList()
+fishingRodList = FishingRodFactory()
 FISHING_ROD_FOR_FISHING = fishingRodList.get(ItemRarity.RARE)
 FISHING_ROD_FOR_MINI_GAME = fishingRodList.get(ItemRarity.EPIC)
 current_equiped_fishing_rod = FISHING_ROD_FOR_FISHING
