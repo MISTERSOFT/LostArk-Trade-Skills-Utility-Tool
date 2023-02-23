@@ -93,8 +93,7 @@ class MainWindow(QMainWindow):
         w.exec()
 
     def clear_logs(self):
-        logservice = LogService()
-        logservice.clear()
+        LogService.push_default("test")
 
     def quit_app(self):
         self.app.quit()
