@@ -8,7 +8,7 @@
     - [ ] Bind UI logic to run the bot
         - [ ] Move/Chunk all code from `main.py` to `core` module
         - [ ] Make `main.py` the startup file
-    - [ ] Create a configuration file (default and user) with [Dynaconf](https://www.dynaconf.com/) / [Quick tuto](https://towardsdatascience.com/from-novice-to-expert-how-to-write-a-configuration-file-in-python-273e171a8eb3#4cab)
+    - [x] Create a configuration file
     - [x] Organize code better
     - [ ] Optimize code
         - [ ] Optimize screenshot function performance
