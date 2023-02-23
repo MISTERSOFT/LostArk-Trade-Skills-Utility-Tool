@@ -1,0 +1,15 @@
+{
+    "lang": {
+        "app": "fr",
+        "ingame": "fr"
+    },
+    "trade_skills": {
+        "fishing": {
+            "keybindings": {
+                "cast_fishing_net": "d",
+                "cast_lure": "e",
+                "cast_throw_bait": "r"
+            }
+        }
+    }
+}
