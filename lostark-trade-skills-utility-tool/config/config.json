@@ -8,7 +8,7 @@
             "keybindings": {
                 "cast_fishing_net": "d",
                 "cast_lure": "e",
-                "cast_throw_bait": "r"
+                "cast_bait": "r"
             }
         }
     }

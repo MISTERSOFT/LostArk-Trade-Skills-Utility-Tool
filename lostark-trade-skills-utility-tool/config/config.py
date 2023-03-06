@@ -1,10 +1,11 @@
 import json
 from core.utils import dict_merge
+from pathlib import Path
 
 
 class Config:
-    def __init__(self, file_path: str, default_values: dict) -> None:
-        self.file_path = file_path
+    def __init__(self, file_path: Path, default_values: dict) -> None:
+        self.file_path = str(file_path)
         self.__properties = dict()
         self.merge(default_values)
         self.load()
