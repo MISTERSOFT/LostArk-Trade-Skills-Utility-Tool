@@ -14,7 +14,7 @@ class FishingRod:
         self.color = color
 
 
-class FishingRodFactory(metaclass=MetaSingleton):
+class FishingRodService(metaclass=MetaSingleton):
     __rods = []
 
     def __init__(self) -> None:
