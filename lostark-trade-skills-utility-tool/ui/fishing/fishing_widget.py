@@ -1,20 +1,12 @@
-from PySide6.QtWidgets import (
-    QWidget,
-    QFormLayout,
-    QComboBox,
-    QGroupBox,
-)
-from ui.common import RepairStrategyFormWidget
+from PySide6.QtWidgets import QWidget, QFormLayout, QComboBox, QGroupBox, QPushButton
+from PySide6.QtCore import Slot
+from ui.common import RepairStrategyFormWidget, KeybindingsFormWidget
 from core.enums import (
     FishingFocusZone,
     FishingStrategy,
     ToolRepairingStrategy,
 )
-from data.fishing.viewmodel import (
-    FishingViewModel,
-    FishingRodFactory,
-    FishingRod,
-)
+from common.fishing import FishingViewModel, FishingRodService, FishingRod
 
 
 class FishingStrategyDoubleWidget(QWidget):
@@ -22,18 +14,18 @@ class FishingStrategyDoubleWidget(QWidget):
         super().__init__(parent)
         layout = QFormLayout()
 
-        fishingRodFactory = FishingRodFactory()
+        fishingRodService = FishingRodService()
 
         # create combobox for rod to fish
         self.rod_to_fish_combobox = QComboBox()
-        rods = fishingRodFactory.get_all()
+        rods = fishingRodService.get_all()
         for rod in rods:
             self.rod_to_fish_combobox.addItem(rod.rarity.name, rod)
         layout.addRow("Rod to fish", self.rod_to_fish_combobox)
 
         # create combobox for rod to play mini-game
         self.rod_to_play_minigame_combobox = QComboBox()
-        rods = fishingRodFactory.get_all()
+        rods = fishingRodService.get_all()
         for rod in rods:
             self.rod_to_play_minigame_combobox.addItem(rod.rarity.name, rod)
         layout.addRow("Rod to play mini-game", self.rod_to_play_minigame_combobox)
@@ -79,9 +71,12 @@ class FishingWidget(QWidget):
         self.repair_strategy_form_widget = RepairStrategyFormWidget(self)
         mainlayout.addRow(self.repair_strategy_form_widget)
 
-        # btn = QPushButton("Debug")
-        # btn.clicked.connect(self.handle_click)
-        # mainlayout.addWidget(btn)
+        self.keybindings_form_widget = KeybindingsFormWidget(self)
+        mainlayout.addRow(self.keybindings_form_widget)
+
+        btn = QPushButton("Debug")
+        btn.clicked.connect(self.debug_data)
+        mainlayout.addWidget(btn)
 
         self.setLayout(mainlayout)
 
@@ -105,6 +100,17 @@ class FishingWidget(QWidget):
         )
         self.repair_strategy_form_widget.repair_every_changed.connect(
             self.on_repair_every_changed
+        )
+
+        # keybindings
+        self.keybindings_form_widget.cast_fishing_net_key_changed.connect(
+            self.on_cast_fishing_net_key_changed
+        )
+        self.keybindings_form_widget.cast_lure_key_changed.connect(
+            self.on_cast_lure_key_changed
+        )
+        self.keybindings_form_widget.cast_bait_key_changed.connect(
+            self.on_cast_bait_key_changed
         )
 
     def init_default_value(self):
@@ -136,14 +142,22 @@ class FishingWidget(QWidget):
             self.viewmodel.repair_strategy_repair_every
         )
 
+        # init keybindings
+        self.keybindings_form_widget.set_cast_fishing_net_key(
+            self.viewmodel.cast_fishing_net_key
+        )
+        self.keybindings_form_widget.set_cast_lure_key(self.viewmodel.cast_lure_key)
+        self.keybindings_form_widget.set_cast_bait_key(self.viewmodel.cast_bait_key)
+
     # ----------------
     # Signal handlers
     # ----------------
-
+    @Slot(int)
     def on_focus_zone_changed(self, index: int):
         value: FishingFocusZone = self.focus_zone_combobox.itemData(index)
         self.viewmodel.focus_zone = value
 
+    @Slot(int)
     def on_fishing_strategy_changed(self, index: int):
         value: FishingStrategy = self.fishing_strategy_combobox.itemData(index)
         self.viewmodel.fishing_strategy = value
@@ -153,25 +167,42 @@ class FishingWidget(QWidget):
         if value is FishingStrategy.DOUBLE_ROD:
             self.fishing_strategy_double_widget.show()
 
-    def on_rod_to_fish_changed(self, index):
+    @Slot(int)
+    def on_rod_to_fish_changed(self, index: int):
         value: FishingRod = (
             self.fishing_strategy_double_widget.rod_to_fish_combobox.itemData(index)
         )
         self.viewmodel.fishing_strategy_rod_to_fish = value
 
-    def on_rod_to_play_minigame_changed(self, index):
+    @Slot(int)
+    def on_rod_to_play_minigame_changed(self, index: int):
         value: FishingRod = (
             self.fishing_strategy_double_widget.rod_to_fish_combobox.itemData(index)
         )
         self.viewmodel.fishing_strategy_rod_to_play_minigame = value
 
+    @Slot(ToolRepairingStrategy)
     def on_repair_strategy_changed(self, value: ToolRepairingStrategy):
         self.viewmodel.repair_strategy = value
 
+    @Slot(int)
     def on_repair_every_changed(self, value: int):
         self.viewmodel.repair_strategy_repair_every = value
 
-    def handle_click(self):
+    @Slot(str)
+    def on_cast_fishing_net_key_changed(self, text: str):
+        self.viewmodel.cast_fishing_net_key = text
+
+    @Slot(str)
+    def on_cast_lure_key_changed(self, text: str):
+        self.viewmodel.cast_lure_key = text
+
+    @Slot(str)
+    def on_cast_bait_key_changed(self, text: str):
+        self.viewmodel.cast_bait_key = text
+
+    @Slot()
+    def debug_data(self):
         print("fishing_strategy", self.viewmodel.fishing_strategy)
         print(
             "fishing_strategy_rod_to_fish",
@@ -186,3 +217,6 @@ class FishingWidget(QWidget):
         print(
             "repair_strategy_repair_every", self.viewmodel.repair_strategy_repair_every
         )
+        print("cast_lure_key", self.viewmodel.cast_lure_key)
+        print("cast_bait_key", self.viewmodel.cast_bait_key)
+        print("cast_fishing_net_key", self.viewmodel.cast_fishing_net_key)

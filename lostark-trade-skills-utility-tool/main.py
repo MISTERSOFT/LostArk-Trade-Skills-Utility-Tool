@@ -8,7 +8,8 @@ from PIL import ImageGrab
 import pytesseract
 import pywinauto
 
-from data.fishing.fishing_rod import FishingRodFactory, ItemRarity
+from core.enums import ItemRarity
+from common.fishing import FishingRodService
 import core.cv2utils as cv2utils
 
 # Set tesseract executable path
@@ -41,9 +42,9 @@ CAST_FISH_BAIT_COOLDOWN = 15  # 15min
 fishBaitCastedAt = None
 
 WORK_ENERGY_REQUIRED_FOR_FISHING = 60
-current_work_energy = 8900
+current_work_energy = 10500
 
-fishingRodList = FishingRodFactory()
+fishingRodList = FishingRodService()
 FISHING_ROD_FOR_FISHING = fishingRodList.get(ItemRarity.RARE)
 FISHING_ROD_FOR_MINI_GAME = fishingRodList.get(ItemRarity.EPIC)
 current_equiped_fishing_rod = FISHING_ROD_FOR_FISHING
@@ -261,26 +262,29 @@ def repair_fishing_rod():
     mouse.click()
     # wait panel to open
     time.sleep(1)
+    try:
+        # detect 'repair all' button position then click
+        # left, top, right, bottom = compute_screenshot_size(560, 540, 350, 800)
+        screenshot = take_screenshot()
+        results = extract_text_from_screenshot(screenshot, "Tout réparer")
+        x, y = results["Tout réparer"]
+        mouse.move(x, y)
+        time.sleep(0.3)
+        mouse.click()
+        time.sleep(1)
 
-    # detect 'repair all' button position then click
-    # left, top, right, bottom = compute_screenshot_size(560, 540, 350, 800)
-    screenshot = take_screenshot()
-    results = extract_text_from_screenshot(screenshot, "Tout réparer")
-    x, y = results["Tout réparer"]
-    mouse.move(x, y)
-    time.sleep(0.3)
-    mouse.click()
-    time.sleep(1)
-
-    # detect on confirm modal the 'OK' button position then click
-    # left, top, right, bottom = compute_screenshot_size(560, 540, 350, 800)
-    screenshot = take_screenshot()
-    results = extract_text_from_screenshot(screenshot, "OK")
-    x, y = results["OK"]
-    mouse.move(x, y)
-    time.sleep(0.3)
-    mouse.click()
-    time.sleep(1)
+        # detect on confirm modal the 'OK' button position then click
+        # left, top, right, bottom = compute_screenshot_size(560, 540, 350, 800)
+        screenshot = take_screenshot()
+        results = extract_text_from_screenshot(screenshot, "OK")
+        x, y = results["OK"]
+        mouse.move(x, y)
+        time.sleep(0.3)
+        mouse.click()
+        time.sleep(1)
+    except:  # noqa: E722
+        # Text recognition failed
+        pass
 
     # exit tool panel
     keyboard.press_and_release("esc")

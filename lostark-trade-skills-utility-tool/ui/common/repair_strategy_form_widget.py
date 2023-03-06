@@ -6,7 +6,7 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QVBoxLayout,
 )
-from PySide6.QtCore import Signal
+from PySide6.QtCore import Signal, Slot
 
 from core.enums import (
     ToolRepairingStrategy,
@@ -84,6 +84,7 @@ class RepairStrategyFormWidget(QWidget):
     # Signal handlers
     # ------------------------
 
+    @Slot(int)
     def on_repair_strategy_changed(self, index: int):
         value = self.repair_strategy_combobox.itemData(index)
 
@@ -94,5 +95,6 @@ class RepairStrategyFormWidget(QWidget):
 
         self.repair_strategy_changed.emit(value)
 
+    @Slot(int)
     def on_repair_every_changed(self, value: int):
         self.repair_every_changed.emit(value)

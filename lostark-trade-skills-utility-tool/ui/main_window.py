@@ -8,9 +8,12 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QLabel,
 )
-from core import LogService
+from PySide6.QtCore import QThreadPool, Slot
+from core import logger, LogService
+from core.exceptions import LostArkProcessNotFound
 from ui.common import SettingsDialogWidget, SeparatorWidget, LogsWidget
 from ui.fishing import FishingWidget
+from common.fishing import FishingWorker
 
 
 class MainWindow(QMainWindow):
@@ -18,6 +21,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.app = app
         self.running = False
+        self.worker = None
+        self.threadpool = QThreadPool()
         self.config_window()
         self.config_menubar()
         self.config_layout()
@@ -28,7 +33,7 @@ class MainWindow(QMainWindow):
     def config_window(self):
         self.setWindowTitle("Lost Ark Trade Skills Utility Tool")
         self.setFixedWidth(600)
-        self.setFixedHeight(500)
+        # self.setFixedHeight(500)
 
     def config_menubar(self):
         menu_bar = self.menuBar()
@@ -62,7 +67,8 @@ class MainWindow(QMainWindow):
         mainlayout = QVBoxLayout()
 
         tabs = QTabWidget()
-        tabs.addTab(FishingWidget(), "Fishing")
+        self.fishing_widget = FishingWidget()
+        tabs.addTab(self.fishing_widget, "Fishing")
         mainlayout.addWidget(tabs)
 
         mainlayout.addWidget(SeparatorWidget())
@@ -88,21 +94,54 @@ class MainWindow(QMainWindow):
     # --------
     # ACTIONS
     # --------
+    @Slot()
     def open_settings_modal(self):
         w = SettingsDialogWidget(self)
         w.exec()
 
+    @Slot()
     def clear_logs(self):
-        LogService.push_default("test")
+        logger.clear()
 
+    @Slot()
     def quit_app(self):
         self.app.quit()
 
+    @Slot()
     def open_about_modal(self):
         print("TODO")
 
+    @Slot()
     def run(self):
-        print("todo")
-        self.running = not self.running
+        if not self.running:
+            try:
+                self.worker = FishingWorker(self.fishing_widget.viewmodel)
+                self.worker.signals.running_changed.connect(self.on_running_changed)
+                self.worker.signals.stopped.connect(self.on_worker_stopped)
+                self.worker.signals.log.connect(self.on_log)
+                self.threadpool.start(self.worker)
+            except LostArkProcessNotFound as err:
+                logger.log(err, LogService.LogType.ERROR)
+                self.running = False
+        else:
+            self.worker.stop()
+
+        self._update_run_button_text()
+
+    def _update_run_button_text(self):
         text = "Stop" if self.running else "Run"
         self.run_btn.setText(text)
+
+    @Slot(bool)
+    def on_running_changed(self, value: bool):
+        self.running = value
+        self._update_run_button_text()
+
+    @Slot()
+    def on_worker_stopped(self):
+        self.running = False
+        self._update_run_button_text()
+
+    @Slot(str, LogService.LogType)
+    def on_log(self, text: str, type: LogService.LogType):
+        logger.log(text, type)

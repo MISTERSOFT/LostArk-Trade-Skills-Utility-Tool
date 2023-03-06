@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QDialog, QFormLayout, QComboBox, QDialogButtonBox
+from PySide6.QtCore import Slot
 
 
 langs = [("fr", "Français"), ("en", "English")]
@@ -32,10 +33,12 @@ class SettingsDialogWidget(QDialog):
 
         self.setLayout(layout)
 
+    @Slot()
     def save(self):
         print("TODO SAVE")
         self.close()
 
+    @Slot()
     def cancel(self):
         print("cancelled")
         self.close()

@@ -32,3 +32,7 @@ def dict_merge(dct, merge_dct):
             dict_merge(dct[k], merge_dct[k])
         else:
             dct[k] = merge_dct[k]
+
+
+def clean_string(text: str):
+    return text.replace("\n", "").strip()
