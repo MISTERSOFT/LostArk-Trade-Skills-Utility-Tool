@@ -8,6 +8,7 @@ from core import (
     LogService,
 )
 from core.utils import clean_string
+from core.enums import FishingStrategy, FishingFocusZone
 import time
 import datetime
 import mouse
@@ -17,6 +18,12 @@ import numpy as np
 
 CAST_FISH_BAIT_COOLDOWN = 15  # 15min
 WORK_ENERGY_REQUIRED_FOR_FISHING = 60
+
+# Focus zone HSV colors (orange has better rewards)
+ORANGE_ZONE_HSV_LOWER = [106, 238, 176]
+ORANGE_ZONE_HSV_UPPER = [135, 255, 255]
+YELLOW_ZONE_HSV_LOWER = [21, 163, 189]
+YELLOW_ZONE_HSV_UPPER = [179, 255, 255]
 
 
 class FishingWorkerSignals(QObject):
@@ -79,7 +86,10 @@ class FishingWorker(QRunnable):
 
         self.wc.focus_window()
         self.last_mouse_position = mouse.get_position()
-        print(self.last_mouse_position)
+        self.signals.log.emit(
+            f"Default mouse position taken: {self.last_mouse_position}",
+            LogService.LogType.INFO,
+        )
         while self.running:
             if self.is_fishing is False:
                 try:
@@ -361,6 +371,9 @@ class FishingWorker(QRunnable):
         keyboard.press_and_release("esc")
 
     def switch_fishing_rod(self):
+        if self.options.fishing_strategy is FishingStrategy.SINGLE_ROD:
+            return
+
         self.signals.log.emit("Switch rod", LogService.LogType.DEFAULT)
         # open inventory
         keyboard.press_and_release("i")
@@ -600,17 +613,21 @@ class FishingWorker(QRunnable):
         self.signals.log.emit("Mini game starts !", LogService.LogType.INFO)
         screenshot_img = self.take_screenshot(500, 100, 550, 560)
         hsv_img = cv2.cvtColor(screenshot_img, cv2.COLOR_RGB2HSV)
-        # orange zone
-        # perfect_zone_hsv_lower = np.array([106, 238, 176])
-        # perfect_zone_hsv_upper = np.array([135, 255, 255])
-        # yellow zone
-        great_zone_hsv_lower = [21, 163, 189]
-        great_zone_hsv_upper = [179, 255, 255]
+        hsv_lower = (
+            YELLOW_ZONE_HSV_LOWER
+            if self.options.focus_zone is FishingFocusZone.YELLOW
+            else ORANGE_ZONE_HSV_LOWER
+        )
+        hsv_upper = (
+            YELLOW_ZONE_HSV_UPPER
+            if self.options.focus_zone is FishingFocusZone.YELLOW
+            else ORANGE_ZONE_HSV_UPPER
+        )
         y_low_zone, y_mid_zone, y_high_zone = self.get_mini_game_zone_position(
-            hsv_img, great_zone_hsv_lower, great_zone_hsv_upper
+            hsv_img, hsv_lower, hsv_upper
         )
         self.signals.log.emit(
-            f"Zone low/mid/high: {y_low_zone}/{y_mid_zone}/{y_high_zone}",
+            f"{self.options.focus_zone.name} zone low/mid/high: {y_low_zone}/{y_mid_zone}/{y_high_zone}",
             LogService.LogType.INFO,
         )
         mini_game_ends_at = datetime.datetime.now() + datetime.timedelta(seconds=5)
