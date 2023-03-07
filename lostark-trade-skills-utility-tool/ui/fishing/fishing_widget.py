@@ -1,4 +1,4 @@
-from PySide6.QtWidgets import QWidget, QFormLayout, QComboBox, QGroupBox, QPushButton
+from PySide6.QtWidgets import QWidget, QFormLayout, QComboBox, QGroupBox
 from PySide6.QtCore import Slot
 from ui.common import RepairStrategyFormWidget, KeybindingsFormWidget
 from core.enums import (
@@ -73,10 +73,6 @@ class FishingWidget(QWidget):
 
         self.keybindings_form_widget = KeybindingsFormWidget(self)
         mainlayout.addRow(self.keybindings_form_widget)
-
-        btn = QPushButton("Debug")
-        btn.clicked.connect(self.debug_data)
-        mainlayout.addWidget(btn)
 
         self.setLayout(mainlayout)
 
@@ -200,23 +196,3 @@ class FishingWidget(QWidget):
     @Slot(str)
     def on_cast_bait_key_changed(self, text: str):
         self.viewmodel.cast_bait_key = text
-
-    @Slot()
-    def debug_data(self):
-        print("fishing_strategy", self.viewmodel.fishing_strategy)
-        print(
-            "fishing_strategy_rod_to_fish",
-            self.viewmodel.fishing_strategy_rod_to_fish.rarity.name,
-        )
-        print(
-            "fishing_strategy_rod_to_play_minigame",
-            self.viewmodel.fishing_strategy_rod_to_play_minigame.rarity.name,
-        )
-        print("focus_zone", self.viewmodel.focus_zone.name)
-        print("repair_strategy", self.viewmodel.repair_strategy.name)
-        print(
-            "repair_strategy_repair_every", self.viewmodel.repair_strategy_repair_every
-        )
-        print("cast_lure_key", self.viewmodel.cast_lure_key)
-        print("cast_bait_key", self.viewmodel.cast_bait_key)
-        print("cast_fishing_net_key", self.viewmodel.cast_fishing_net_key)
