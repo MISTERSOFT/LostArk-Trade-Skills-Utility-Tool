@@ -5,23 +5,22 @@
     - [ ] Rework has_work_energy() function
     - [x] Rework switch_fishing_rod() function
     - [x] Create UI with [PySide](https://doc.qt.io/qtforpython/examples/example_bluetooth__btscanner.html)
-    - [ ] Bind UI logic to run the bot
-        - [ ] Move/Chunk all code from `main.py` to `core` module
-        - [ ] Make `main.py` the startup file
+    - [x] Bind UI logic to run the bot
+        - [x] Move/Chunk all code
+        - [x] Make `main.py` the startup file
     - [x] Create a configuration file
     - [x] Organize code better
     - [ ] Optimize code
-        - [ ] Optimize screenshot function performance
-        - [ ] Use multi-threading
+        - [x] Optimize screenshot function performance
+        - [x] Use multi-threading
         - [ ] Try to refine/optimize detection functions
         - [ ] Detect Work Energy every 10min instead of every loop iteration
     - [ ] Check if we have better results with _EasyOCR_ than _Tesseract OCR_
     - [ ] Detect if we lost server connection or if the game window has been closed
     - [ ] Implement timeout when no catch detected for a long time (like 1min)
     - [ ] Implement detection of Trade Skills hotbars
-    - [ ] Implement fishing strategy
-    - [ ] Implement repair strategy
+    - [x] Implement fishing strategy
+    - [x] Implement repair strategy
     - [ ] Implement internationalization for in-game text recognition with [python-i18n](https://pypi.org/project/python-i18n/)
-    - [ ] Be able to choose colored zone to focus in mini games
+    - [x] Be able to choose colored zone to focus in mini games
     - [ ] Manage more screen size ?
-    - [ ] Create unit tests
