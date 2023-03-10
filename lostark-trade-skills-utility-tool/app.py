@@ -8,6 +8,3 @@ def run():
     window = MainWindow(app)
     window.show()
     return app.exec()
-
-
-sys.exit(run())
