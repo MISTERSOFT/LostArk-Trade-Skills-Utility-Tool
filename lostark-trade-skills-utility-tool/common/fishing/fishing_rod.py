@@ -2,7 +2,7 @@ import cv2
 from pathlib import Path
 
 from core import MetaSingleton
-from core.utils import images_dir
+from core.utils import resource_path
 from core.enums import ItemRarity
 
 
@@ -20,37 +20,27 @@ class FishingRodService(metaclass=MetaSingleton):
     def __init__(self) -> None:
         self.__rods = [
             FishingRod(
-                Path.joinpath(
-                    images_dir(), "fishing_rod_uncommon_icon.png"
-                ),  # "../../assets/images/fishing_rod_uncommon_icon.png",
+                resource_path("assets/images/fishing_rod_uncommon_icon.png"),
                 ItemRarity.UNCOMMON,
                 "#8df901",
             ),
             FishingRod(
-                Path.joinpath(
-                    images_dir(), "fishing_rod_rare_icon.png"
-                ),  # "../../assets/images/fishing_rod_rare_icon.png",
+                resource_path("assets/images/fishing_rod_rare_icon.png"),
                 ItemRarity.RARE,
                 "#00b0fa",
             ),
             FishingRod(
-                Path.joinpath(
-                    images_dir(), "fishing_rod_epic_icon.png"
-                ),  # "../../assets/images/fishing_rod_epic_icon.png",
+                resource_path("assets/images/fishing_rod_epic_icon.png"),
                 ItemRarity.EPIC,
                 "#ba00f9",
             ),
             FishingRod(
-                Path.joinpath(
-                    images_dir(), "fishing_rod_legendary_icon.png"
-                ),  # "../../assets/images/fishing_rod_legendary_icon.png",
+                resource_path("assets/images/fishing_rod_legendary_icon.png"),
                 ItemRarity.LEGENDARY,
                 "#f99200",
             ),
             FishingRod(
-                Path.joinpath(
-                    images_dir(), "fishing_rod_relic_icon.png"
-                ),  # "../../assets/images/fishing_rod_relic_icon.png",
+                resource_path("assets/images/fishing_rod_relic_icon.png"),
                 ItemRarity.RELIC,
                 "#fa5d00",
             ),

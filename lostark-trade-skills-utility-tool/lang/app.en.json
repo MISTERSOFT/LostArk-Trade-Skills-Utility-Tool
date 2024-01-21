@@ -1,0 +1,64 @@
+{
+    "settings": {
+        "application_language": "Application language",
+        "ingame_language": "In-game language"
+    },
+    "menubar": {
+        "file": {
+            "label": "File",
+            "settings": "Settings",
+            "clear_logs": "Clear logs",
+            "quit": "Quit"
+        },
+        "help": {
+            "label": "Help",
+            "about": "About"
+        }
+    },
+    "footer": {
+        "run": "Run",
+        "stop": "Stop"
+    },
+    "fishing": {
+        "zone_to_focus": {
+            "label": "Zone to focus in mini-game",
+            "enums": {
+                "yellow": "Yellow",
+                "orange": "Orange"
+            }
+        },
+        "fishing_strategy": {
+            "label": "Fishing strategy",
+            "select": "Select a strategy",
+            "rod_to_fish": "Rod to fish",
+            "rod_to_play_minigame": "Rod to play mini-game",
+            "enums": {
+                "strategy": {
+                    "single": "Single rod",
+                    "double": "Double rod"
+                },
+                "rarity": {
+                    "uncommon": "Uncommon",
+                    "rare": "Rare",
+                    "epic": "Epic",
+                    "legendary": "Legendary",
+                    "relic": "Relic"
+                }
+            }
+        },
+        "tool_repairing_strategy": {
+            "label": "Tool repairing strategy",
+            "select": "Select a strategy",
+            "number_of_use_before_repairing": "Number of use before repairing",
+            "enums": {
+                "no_repair": "No repair",
+                "repair_every_x_use": "Repair every X use"
+            }
+        },
+        "keybindings": {
+            "cast_fishing_net": "Cast fishing net",
+            "cast_lure": "Cast lure",
+            "cast_bait": "Cast bait"
+        }
+    }
+}

@@ -40,5 +40,4 @@ class SettingsDialogWidget(QDialog):
 
     @Slot()
     def cancel(self):
-        print("cancelled")
         self.close()

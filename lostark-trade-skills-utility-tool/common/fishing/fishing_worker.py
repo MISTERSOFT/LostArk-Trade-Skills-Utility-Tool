@@ -3,7 +3,7 @@ from .viewmodel import FishingViewModel
 from core import (
     cv2utils,
     OCR,
-    PytesseractOCRStrategy,
+    EasyOCROCRStrategy,
     WindowCapture,
     LogService,
 )
@@ -53,7 +53,7 @@ class FishingWorker(QRunnable):
         self.signals = FishingWorkerSignals()
         self.wc = WindowCapture()
         self.options = opts
-        self.ocr = OCR(PytesseractOCRStrategy())
+        self.ocr = OCR(EasyOCROCRStrategy())
         self.running = False
 
         self.hook_mark_img = cv2.imread(
