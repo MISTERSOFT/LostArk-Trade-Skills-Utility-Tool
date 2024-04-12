@@ -1,3 +1,9 @@
+> [!WARNING]
+> I don't play Lost Ark anymore but the bot actually work.
+> You can only fish but your game must be in French.
+> To run the bot you need to run the code. There is no executable.
+> I'm not a Python developer so I know my code is not efficient. __Feel free to do pull request__ and complete this damn bot.
+
 # Lost Ark trade skills utility tool
 A Lost Ark trade skills utility tool using Python, OpenCV and Tesseract OCR.
 
